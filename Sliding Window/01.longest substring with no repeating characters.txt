@@ -1,0 +1,52 @@
+link : https://leetcode.com/problems/longest-substring-without-repeating-characters/
+
+Question:
+Given a string s, find the length of the longest 
+substring
+ without repeating characters.
+
+ 
+
+Example 1:
+
+Input: s = "abcabcbb"
+Output: 3
+Explanation: The answer is "abc", with the length of 3.
+
+
+
+
+SOLUTION:
+
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+       vector<int> hash(256,-1);
+       int n = s.length();
+       if(n==0){
+           return 0;
+       }
+       int maxLen = 1;
+       int ptr=0;
+       for(int i=0;i<n;i++){
+           if(hash[s[i]]==-1){
+               hash[s[i]]=i;
+           }else if(hash[s[i]]<ptr){
+               hash[s[i]]=i;
+           }else{
+               maxLen = max(maxLen,i-ptr);
+               cout << i-ptr << " ";
+               if(s[i]==s[ptr]){
+                   ptr++;
+               }else{
+                   ptr = min(i,hash[s[i]]+1);
+               }
+               hash[s[i]]=i;
+           }
+       }
+       maxLen = max(maxLen,n-ptr);
+       return maxLen;
+    }
+};
+
+

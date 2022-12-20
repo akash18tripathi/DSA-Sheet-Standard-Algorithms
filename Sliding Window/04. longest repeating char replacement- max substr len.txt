@@ -1,0 +1,59 @@
+link : https://leetcode.com/problems/longest-repeating-character-replacement/description/
+
+Question:
+You are given a string s and an integer k. You can choose any character of the string and change it to any other uppercase English character. You can perform this operation at most k times.
+
+Return the length of the longest substring containing the same letter you can get after performing the above operations.
+
+ 
+
+Example 1:
+
+Input: s = "ABAB", k = 2
+Output: 4
+Explanation: Replace the two 'A's with two 'B's or vice versa.
+
+
+
+
+
+
+SOLUTION:
+
+class Solution {
+public:
+    int maxOcc(unordered_map<int,int> arr){
+        int count=0;
+        for(pair<int,int> p : arr){
+            count = max(count,p.second);
+        }
+        return count;
+    }
+    int characterReplacement(string s, int k) {
+        int n = s.length();
+        unordered_map<int,int> hash;
+        int start=0,end=0,len=0,index,maxCount,maxLen=0;
+        while(end<n){
+            index=s[end]-'A';
+            hash[index]++;
+            len=end-start+1;
+            maxCount = maxOcc(hash);
+            if(len-maxCount>k){
+                maxLen = max(maxLen,end-start);
+                while(len-maxCount>k && start<=end){
+                    hash[s[start]-'A']--;
+                    if(hash[s[start]-'A']==0){
+                        hash.erase(s[start]-'A');
+                    }
+                    start++;
+                    len=end-start+1;
+                    maxCount = maxOcc(hash);
+                }
+            }
+            maxLen = max(maxLen,end-start);
+            end++;
+        }
+        maxLen = max(maxLen,end-start);
+        return maxLen;
+    }
+};
